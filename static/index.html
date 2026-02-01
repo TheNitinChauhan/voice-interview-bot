@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Nitin Chauhan – Voice Interview Bot</title>
+</head>
+
+<body style="text-align:center; font-family:Arial;">
+
+    <h2>🎙️ Nitin Chauhan – Voice Interview Bot</h2>
+    <button onclick="start()">Start Speaking</button>
+    <p id="out"></p>
+
+    <script>
+        const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        rec.lang = "en-US";
+
+        function start() {
+            rec.start();
+        }
+
+        rec.onresult = async (e) => {
+            const text = e.results[0][0].transcript;
+            document.getElementById("out").innerText = "You: " + text;
+
+            const r = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text })
+            });
+
+            const data = await r.json();
+            const msg = new SpeechSynthesisUtterance(data.reply);
+            speechSynthesis.speak(msg);
+        };
+    </script>
+
+</body>
+
+</html>
