@@ -122,10 +122,13 @@ graph TB
     API -->|Read Config| Env
     HTML -->|Static Files| StaticFiles
 
-    style Client fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
-    style API fill:#764ba2,stroke:#333,stroke-width:2px,color:#fff
-    style OpenAI fill:#00d4ff,stroke:#333,stroke-width:2px,color:#000
-    style WebSpeech fill:#00d4ff,stroke:#333,stroke-width:2px,color:#000
+    classDef client fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    classDef backend fill:#764ba2,stroke:#333,stroke-width:2px,color:#fff
+    classDef external fill:#00d4ff,stroke:#333,stroke-width:2px,color:#000
+    
+    class Client client
+    class API,IntentDetector,AnswerDB,Prompts backend
+    class OpenAI,WebSpeech external
 ```
 
 ### User Flow Diagram
