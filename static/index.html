@@ -1,40 +1,21 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Nitin Chauhan – Voice Interview Bot</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body style="text-align:center; font-family:Arial;">
+<body>
 
-    <h2>🎙️ Nitin Chauhan – Voice Interview Bot</h2>
-    <button onclick="start()">Start Speaking</button>
-    <p id="out"></p>
+<div class="app">
+    <h1>🎙️ Interview with Nitin Chauhan</h1>
 
-    <script>
-        const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        rec.lang = "en-US";
+    <div class="chat" id="chat"></div>
 
-        function start() {
-            rec.start();
-        }
+    <button class="mic-btn" onclick="start()">🎤 Start Speaking</button>
+</div>
 
-        rec.onresult = async (e) => {
-            const text = e.results[0][0].transcript;
-            document.getElementById("out").innerText = "You: " + text;
-
-            const r = await fetch("/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: text })
-            });
-
-            const data = await r.json();
-            const msg = new SpeechSynthesisUtterance(data.reply);
-            speechSynthesis.speak(msg);
-        };
-    </script>
-
+<script src="script.js"></script>
 </body>
-
 </html>
