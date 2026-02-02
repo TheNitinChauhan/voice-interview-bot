@@ -1,16 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Voice Interview Bot</title>
+  <title>Voice Interview with Nitin Chauhan</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
   <div class="app">
+
+    <!-- Avatar + Voice Indicator -->
+    <div class="avatar-wrapper" id="avatar">
+      <img src="/static/nitin.jpg" alt="Nitin Chauhan" class="avatar" />
+      <div class="voice-indicator" id="voiceIndicator"></div>
+    </div>
+
     <h1>🎙️ Voice Interview with Nitin Chauhan</h1>
     <p>This bot answers interview questions as I would</p>
 
+    <!-- Main Controls -->
     <button id="micBtn">🎤 Start Speaking</button>
+
+    <!-- Pause / Resume / Next -->
+    <div class="controls">
+      <button id="pauseBtn">⏸ Pause</button>
+      <button id="resumeBtn">▶ Resume</button>
+      <button id="nextBtn">⏭ Next Question</button>
+    </div>
+
     <p id="status"></p>
+
   </div>
 
   <script src="/static/script.js"></script>
