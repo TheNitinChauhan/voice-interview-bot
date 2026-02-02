@@ -1,5 +1,15 @@
 # Voice Interview Bot
 
+![App screenshot](static/image.png)
+
+Live Demo: Explore the App Here  
+⚠️ Deployed on Render (free tier, may take a few seconds to load)  
+https://voice-interview-bot-iynl.onrender.com/
+
+## Developer Info 
+Hi, I’m Nitin Chauhan  
+Chemical Engineering undergraduate at IIT (ISM) Dhanbad
+
 A modern, interactive voice-enabled AI interview bot built with FastAPI and OpenAI's GPT-4 that allows candidates to conduct interviews via voice or text. The bot intelligently detects user intents and provides tailored responses based on predefined answers or AI-generated responses.
 
 ## 📋 Table of Contents
@@ -187,11 +197,6 @@ sequenceDiagram
     
     Browser->>Browser: 2️⃣2️⃣ Clear Status<br/>Ready for Next
     User->>Browser: 2️⃣3️⃣ Ask Another<br/>Question (Loop)
-
-    style Browser fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
-    style Server fill:#764ba2,stroke:#333,stroke-width:2px,color:#fff
-    style GPT fill:#00d4ff,stroke:#333,stroke-width:2px,color:#000
-    style WebAPI fill:#06b6d4,stroke:#333,stroke-width:2px,color:#000
 ```
 
 ---
