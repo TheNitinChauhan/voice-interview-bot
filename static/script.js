@@ -3,9 +3,22 @@ const micBtn = document.getElementById("micBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const resumeBtn = document.getElementById("resumeBtn");
 const nextBtn = document.getElementById("nextBtn");
+const sendTextBtn = document.getElementById("sendTextBtn");
 
 const statusText = document.getElementById("status");
 const avatar = document.getElementById("avatar");
+const chatBox = document.getElementById("chatBox");
+const textInput = document.getElementById("textInput");
+const botSubtitleToggle = document.getElementById("botSubtitleToggle");
+
+// ---------- CHAT HELPERS ----------
+function addMessage(type, text) {
+  const div = document.createElement("div");
+  div.className = `msg ${type}`;
+  div.innerText = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
 // ---------- VOICE INDICATOR HELPERS ----------
 function setListening() {
@@ -46,24 +59,11 @@ micBtn.onclick = () => {
 // ---------- ON SPEECH RESULT ----------
 recognition.onresult = async (event) => {
   const userText = event.results[0][0].transcript;
-  statusText.innerText = `You said: "${userText}"`;
+  addMessage("user", userText);
+  statusText.innerText = "🧠 Thinking...";
   clearIndicator();
 
-  try {
-    const res = await fetch("/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userText }),
-    });
-
-    const data = await res.json();
-    speak(data.reply);
-
-  } catch (err) {
-    console.error(err);
-    statusText.innerText = "❌ Error talking to server";
-    clearIndicator();
-  }
+  await handleBotResponse(userText);
 };
 
 // ---------- SPEECH ERROR ----------
@@ -72,14 +72,52 @@ recognition.onerror = () => {
   clearIndicator();
 };
 
+// ---------- TEXT INPUT ----------
+sendTextBtn.onclick = async () => {
+  const text = textInput.value.trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  textInput.value = "";
+  statusText.innerText = "🧠 Thinking...";
+
+  await handleBotResponse(text);
+};
+
+// ---------- BOT RESPONSE HANDLER ----------
+async function handleBotResponse(userText) {
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText }),
+    });
+
+    const data = await res.json();
+
+    // Subtitle (only if toggle ON)
+    if (botSubtitleToggle.checked) {
+      addMessage("bot", data.reply);
+    }
+
+    speak(data.reply);
+
+  } catch (err) {
+    console.error(err);
+    statusText.innerText = "❌ Error talking to server";
+    clearIndicator();
+  }
+}
+
 // ---------- SPEAK FUNCTION ----------
 function speak(text) {
-  speechSynthesis.cancel(); // stop any previous speech
+  speechSynthesis.cancel();
   clearIndicator();
   setSpeaking();
 
   currentUtterance = new SpeechSynthesisUtterance(text);
   currentUtterance.lang = "en-US";
+  currentUtterance.rate = 0.9;
 
   currentUtterance.onend = () => {
     clearIndicator();
@@ -108,8 +146,8 @@ resumeBtn.onclick = () => {
 
 // ---------- NEXT QUESTION ----------
 nextBtn.onclick = () => {
-  recognition.abort();       // stop listening if active
-  speechSynthesis.cancel();  // stop speaking
+  recognition.abort();
+  speechSynthesis.cancel();
   clearIndicator();
   statusText.innerText = "🎤 Ready for next question";
 };
