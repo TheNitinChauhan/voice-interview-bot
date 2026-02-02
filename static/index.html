@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Nitin Chauhan – Voice Interview Bot</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Voice Interview Bot</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body>
+  <div class="app">
+    <h1>🎙️ Voice Interview Bot</h1>
+    <p>Click and ask interview questions</p>
 
-<div class="app">
-    <h1>🎙️ Interview with Nitin Chauhan</h1>
+    <button id="micBtn">🎤 Start Speaking</button>
+    <p id="status"></p>
+  </div>
 
-    <div class="chat" id="chat"></div>
-
-    <button class="mic-btn" onclick="start()">🎤 Start Speaking</button>
-</div>
-
-<script src="script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>

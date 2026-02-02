@@ -1,31 +1,21 @@
-const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-rec.lang = "en-US";
+const micBtn = document.getElementById("micBtn");
+const statusText = document.getElementById("status");
 
-const chat = document.getElementById("chat");
+micBtn.addEventListener("click", async () => {
+  statusText.innerText = "Requesting microphone access...";
 
-function addMessage(sender, text) {
-    chat.innerHTML += `<div class="${sender}">${text}</div>`;
-    chat.scrollTop = chat.scrollHeight;
-}
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    statusText.innerText = "🎙️ Listening...";
 
-function start() {
-    addMessage("system", "🎧 Listening...");
-    rec.start();
-}
+    // Just for test — stop mic after 5 sec
+    setTimeout(() => {
+      stream.getTracks().forEach(track => track.stop());
+      statusText.innerText = "Mic working ✅ (recording stopped)";
+    }, 5000);
 
-rec.onresult = async (e) => {
-    const text = e.results[0][0].transcript;
-    addMessage("user", text);
-
-    const r = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-    });
-
-    const data = await r.json();
-    addMessage("bot", data.reply);
-
-    const msg = new SpeechSynthesisUtterance(data.reply);
-    speechSynthesis.speak(msg);
-};
+  } catch (err) {
+    console.error(err);
+    statusText.innerText = "❌ Microphone permission denied";
+  }
+});
